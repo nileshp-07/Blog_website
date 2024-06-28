@@ -1,0 +1,29 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id String  @id @default(uuid())  //uuid  is a random long string
+  email String @unique
+  name String
+  password String
+  occupation String?
+  posts Post[]
+}
+
+model Post {
+  id   String  @id @default(uuid())
+  title String 
+  content String
+  publishedDate  DateTime @default(now())
+  authorId String
+  author User @relation(fields: [authorId], references: [id])   // this will not reflect to the database just to establish the relationship between the table
+  //setting the relation is not mandatory but it is recommended to enforce the putting any random id that is not exist the user table
+}
